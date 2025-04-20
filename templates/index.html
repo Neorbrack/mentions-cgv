@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<body>
+<div class="container" xmlns="http://www.w3.org/1999/html">
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Générateur de Mentions Légales</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<h1>Générez vos mentions légales + CGV</h1>
+ <form action="/generate" method="POST">
+    <!-- Tu peux pré-remplir avec des valeurs par défaut si besoin -->
+    <label>Nom de l'entreprise</label>
+    <input type="text" name="nom_entreprise" required>
+
+    <label>Adresse</label>
+    <input type="text" name="adresse" required>
+
+    <label>Statut juridique</label>
+    <input type="text" name="statut" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Numéro SIRET</label>
+    <input type="text" name="siret" required>
+
+    <button type="submit">✨ Générer les mentions légales</button>
+</body>

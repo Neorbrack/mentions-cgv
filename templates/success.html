@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Commande confirmée</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 Merci pour votre commande</h1>
+    <p>Votre paiement a été confirmé.</p>
+    <p>Le PDF vous a été envoyé par email. Vous pouvez aussi le télécharger ici :</p>
+
+    <!-- ✅ Formulaire caché pour JS -->
+    <form id="autoDownload" action="/download_pdf" method="POST" style="display: none;">
+      <input type="hidden" name="data" value='{{ data | tojson | safe }}'>
+    </form>
+
+    <!-- ✅ Bouton visible -->
+    <div style="margin-top: 30px; text-align: center;">
+      <p style="color: #888;">⏳ Si le téléchargement ne démarre pas automatiquement :</p>
+      <button onclick="telechargementManuel()" style="padding: 10px 25px; font-size: 16px; margin-top: 10px;">
+        📄 Télécharger manuellement
+      </button>
+    </div>
+  </div>
+
+  <!-- ✅ Script JS propre -->
+  <script>
+    // Téléchargement automatique au chargement de la page
+    window.onload = function () {
+      telechargementManuel();
+    };
+
+    // Téléchargement manuel ou auto
+    function telechargementManuel() {
+      const form = document.getElementById("autoDownload");
+      const formData = new FormData(form);
+
+      fetch("/download_pdf", {
+        method: "POST",
+        body: formData,
+        credentials: "same-origin",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      })
+      .then(response => {
+        if (response.status === 403) {
+          alert("❌ Vous devez effectuer le paiement avant de pouvoir télécharger le PDF.");
+          return null;
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        if (!blob) return;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "mentions_legales.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch(error => {
+        alert("❌ Une erreur est survenue.");
+        console.error(error);
+      });
+    }
+  </script>
+</body>
+</html>

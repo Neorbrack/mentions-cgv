@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mentions légales générées</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 Vos mentions légales sont prêtes</h1>
+
+    <div style="margin-bottom: 30px;">
+      {{ texte | safe }}
+    </div>
+
+<form action="/create-checkout-session" method="POST" style="text-align: center;">
+  <input type="hidden" name="data" value='{{ data | tojson | safe }}'>
+  <p style="margin-bottom: 20px;">
+    📄 Recevez vos mentions légales & CGV professionnelles <br>
+    directement par email au format PDF sécurisé.
+  </p>
+  <button type="submit" style="font-size: 18px;">
+    💳 Payer 5 € pour recevoir mon PDF
+  </button>
+  <p style="margin-top: 10px; font-size: 12px; color: #666;">
+    Paiement 100% sécurisé via Stripe
+  </p>
+</form>
+</body>
+</html>
